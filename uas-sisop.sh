@@ -1,10 +1,29 @@
 #!/bin/bash
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[1;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# ==============================================================================
+# BLOK WARNA BARU (Opsi: Modern & Elegan)
+# Perubahan hanya dilakukan di sini.
+# ==============================================================================
+
+# Definisi 2 warna utama yang akan digunakan
+UTAMA='\033[0;36m'      # Biru Terang (Cyan) untuk info, menu, dan pesan sukses
+KESALAHAN='\033[0;31m'  # Merah untuk pesan error
+NC='\033[0m'           # No Color (Tidak diubah)
+
+# Mapping (pemetaan) warna lama ke skema 2 warna yang baru.
+# Backend akan tetap memanggil $GREEN, $YELLOW, dll., tapi nilainya sudah kita ubah.
+GREEN=$UTAMA
+YELLOW=$UTAMA
+BLUE=$UTAMA
+RED=$KESALAHAN
+
+# === AKHIR BLOK WARNA BARU ===
+
+
+# ==============================================================================
+# BAGIAN BACKEND / LOGIKA PROGRAM
+# Teks antarmuka diubah ke Bahasa Indonesia.
+# ==============================================================================
 
 # ---------------------
 # ASCII Art Via Figlet
@@ -15,7 +34,8 @@ ascii_welcome() {
         figlet -c "UAS SISOP"
         echo -e "${NC}"
     else
-        echo -e "${GREEN}***SAMPURASUN SADAYANA!***${NC}"
+        # DIUBAH DARI BAHASA SUNDA
+        echo -e "${GREEN}SELAMAT DATANG!${NC}"
     fi
 }
 
@@ -23,7 +43,7 @@ ascii_goodbye() {
     clear
     echo -e "${YELLOW}"
     echo "╔══════════════════════════════╗"
-    echo "║ Udah ya, sekian. Bye!║"
+    echo "║ Terima Kasih! Sampai Jumpa!  ║" # Sedikit disesuaikan agar lebih formal
     echo "╚══════════════════════════════╝"
     echo -e "${NC}"
     echo -e "\a"  # beep sound
@@ -61,10 +81,10 @@ show_os_info() {
     if [ -f /etc/os-release ]; then
         echo -e "${GREEN}Detail Sistem Operasi:${NC}"
         . /etc/os-release
-        echo -e "Nama OS     : $NAME"
-        echo -e "Versi       : $VERSION"
-        echo -e "ID          : $ID"
-        echo -e "Keterangan  : $PRETTY_NAME"
+        echo -e "Nama OS      : $NAME"
+        echo -e "Versi        : $VERSION"
+        echo -e "ID           : $ID"
+        echo -e "Keterangan   : $PRETTY_NAME"
         echo -e ""
     else
         echo -e "${RED}File /etc/os-release tidak ditemukan.${NC}"
@@ -103,14 +123,15 @@ show_install_time() {
 # ---------------------
 show_time_and_greeting() {
     current_hour=$(date +'%H')
+    # DIUBAH DARI BAHASA SUNDA DAN LOGIKANYA DISESUAIKAN
     if [ "$current_hour" -ge 5 ] && [ "$current_hour" -lt 12 ]; then
-        greeting="Wilujeng Enjing $USER"
-    elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 18 ]; then
-        greeting="Wilujeng Siang $USER"
-    elif [ "$current_hour" -ge 18 ] && [ "$current_hour" -lt 21 ]; then
-        greeting="Wilujeng Sonten $USER"
+        greeting="Selamat Pagi $USER"
+    elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 15 ]; then
+        greeting="Selamat Siang $USER"
+    elif [ "$current_hour" -ge 15 ] && [ "$current_hour" -lt 19 ]; then
+        greeting="Selamat Sore $USER"
     else
-        greeting="Wilujeng Wengi $USER"
+        greeting="Selamat Malam $USER"
     fi
     
     progress_bar
@@ -178,12 +199,12 @@ show_network_info() {
 show_user_info() {
     progress_bar
     echo -e "${GREEN}Informasi Pengguna Saat Ini:${NC}"
-    echo -e "Username      : $USER"
-    echo -e "User ID       : $(id -u)"
-    echo -e "Group ID      : $(id -g)"
-    echo -e "Nama Lengkap  : $(getent passwd $USER | cut -d: -f5)"
-    echo -e "Shell         : $SHELL"
-    echo -e "Home Directory: $HOME"
+    echo -e "Username       : $USER"
+    echo -e "User ID        : $(id -u)"
+    echo -e "Group ID       : $(id -g)"
+    echo -e "Nama Lengkap   : $(getent passwd $USER | cut -d: -f5)"
+    echo -e "Shell          : $SHELL"
+    echo -e "Home Directory : $HOME"
     #echo -e "Tanggal Login : $(last -n 1 $USER | head -n 1 | awk '{print $4, $5, $6, $7}')"
 }
 
@@ -193,7 +214,7 @@ show_user_info() {
 menu() {
     clear
     ascii_welcome
-    echo -e "${YELLOW}1.${NC} Tampilkan Kehidupan Saat Ini"
+    echo -e "${YELLOW}1.${NC} Tampilkan Waktu dan Sapaan"
     echo -e "${YELLOW}2.${NC} Tampilkan Daftar Direktori"
     echo -e "${YELLOW}3.${NC} Informasi Jaringan"  
     echo -e "${YELLOW}4.${NC} Tampilkan Detail OS"
@@ -210,7 +231,7 @@ menu() {
             ;;
         2)
             progress_bar
-            echo -e "${GREEN}Isi Direktori: ${NC}"
+            echo -e "${GREEN}Isi Direktori Saat Ini: ${NC}"
             ls -lah --color=auto
             ;;
         3)
@@ -243,4 +264,3 @@ menu() {
 # Jalankan
 # ---------------------
 menu
-
