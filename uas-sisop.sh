@@ -118,7 +118,7 @@ show_time_and_greeting() {
     date
 }
 
-# ---------------------
+# ----------------------
 # Menampilkan Informasi Penggunaan Disk
 # ---------------------
 show_disk_usage() {
